@@ -6,22 +6,35 @@ const morgan = require('morgan');
 const nunjucks = require('nunjucks');
 const bodyParser = require('body-parser');
 
+const models = require('./models')
+const wikiRouter = require('./routes/wiki');
+
+
 //Logs information about each incoming request.
 app.use('/', function(req, res, next){
   console.log(req.method, req.path, req.statusCode);
   next();
 });
 
-var server = app.listen(3000, function(){
-  console.log('server listening');
+// syncing our models
+models.User.sync({})
+.then(function () {
+    return models.Page.sync({})
 })
+.then(function () {
+    app.listen(3000, function () {
+        console.log('Server is listening on port 3001!');
+    });
+})
+.catch(console.error);
 
 app.use('/', routes());
+app.use('/wiki', wikiRouter);
 
 //Serves up static files from some kind of public folder
 app.use(express.static('public'));
 
-// point nunjucks to the directory containing templates and turn off caching; configure returns an Environment 
+// point nunjucks to the directory containing templates and turn off caching; configure returns an Environment
 // instance, which we'll want to use to add Markdown support later.
 var env = nunjucks.configure('views', {noCache: true});
 // have res.render work with html files
