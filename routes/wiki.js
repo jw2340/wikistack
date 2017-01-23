@@ -16,11 +16,12 @@ router.post('/', function(req, res, next) {
 
   var page = Page.build({
     title: title,
-    content: content
+    content: content,
   });
 
-  page.save().then(function(){
-    res.json(req.body);
+  page.save().then(function(savedPage){
+    console.log('this is the savedpage',savedPage.route);
+    res.redirect(savedPage.route); ///???
   }).catch(function(err){
     console.error(err);
   });
@@ -31,15 +32,16 @@ router.get('/add', function(req, res){
 });
 
 router.get('/:urlTitle', function(req, res, next) {
-  var requestedUrlTitle = req.params.urlTitle;
+  var title = req.params.urlTitle;
 
-  Page.findAll({
+  Page.findOne({
     where : {
-      urlTitle: requestedUrlTitle
+      title: title
     }
   })
-  .then(function(data) {
-    res.json(data);
+  .then(function(page) {
+    //res.json(data[0]);
+    res.render('wikipage', {page : page});
   })
   .catch(next);
 

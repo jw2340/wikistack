@@ -35,20 +35,12 @@ const Page = db.define('page', {
         return Math.random().toString(36).substring(2, 7);
       }
     }
-    
     page.urlTitle = generateUrlTitle(page.title);  
-    
     }
-  }
-} , {
+  },
   getterMethods: {
     route: function() { return '/wiki/' + this.urlTitle}
   }
-  // setterMethods: {
-  //   route: function(value) {
-  //     this.setDataValue('urlTitle', value)
-  //   }
-  // }
 })
 
 const User = db.define('user', {
