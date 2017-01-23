@@ -13,18 +13,6 @@ router.get('/', function(req, res){
 router.post('/', function(req, res, next) {
   var title = req.body.title;
   var content = req.body.content;
-  
-  function generateUrlTitle (title) {
-  if (title) {
-    // Removes all non-alphanumeric characters from title
-    // And make whitespace underscore
-    return title.replace(/\s+/g, '_').replace(/\W/g, '');
-  } else {
-    // Generates random 5 letter string
-    return Math.random().toString(36).substring(2, 7);
-  }
-}
-  
 
   var page = Page.build({
     title: title,
