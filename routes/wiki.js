@@ -20,7 +20,7 @@ router.post('/', function(req, res, next) {
   });
 
   page.save().then(function(){
-    res.redirect('/');
+    res.json(req.body);
   }).catch(function(err){
     console.error(err);
   });
@@ -28,6 +28,21 @@ router.post('/', function(req, res, next) {
 
 router.get('/add', function(req, res){
   res.render('addpage');
+});
+
+router.get('/:urlTitle', function(req, res, next) {
+  var requestedUrlTitle = req.params.urlTitle;
+
+  Page.findAll({
+    where : {
+      urlTitle: requestedUrlTitle
+    }
+  })
+  .then(function(data) {
+    res.json(data);
+  })
+  .catch(next);
+
 });
 
 module.exports = router;
