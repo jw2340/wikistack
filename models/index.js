@@ -35,7 +35,7 @@ const Page = db.define('page', {
         return Math.random().toString(36).substring(2, 7);
       }
     }
-    page.urlTitle = generateUrlTitle(page.title);
+      page.urlTitle = generateUrlTitle(page.title);
     }
   },
   getterMethods: {

@@ -24,9 +24,11 @@ router.post('/', function(req, res, next) {
     }).then(function(createdPage) {
       return createdPage.setAuthor(user);
     });
+  }).then(function(createdPage) {
+    res.redirect(createdPage.route);
   }).catch(function(err) {
     console.error(err);
-  })
+  });
 
   // var title = req.body.title;
   // var content = req.body.content;
@@ -57,7 +59,6 @@ router.get('/:urlTitle', function(req, res, next) {
     }
   })
   .then(function(page) {
-    //res.json(data[0]);
     res.render('wikipage', {page : page});
   })
   .catch(next);
