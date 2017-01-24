@@ -11,20 +11,37 @@ router.get('/', function(req, res){
 });
 
 router.post('/', function(req, res, next) {
-  var title = req.body.title;
-  var content = req.body.content;
-
-  var page = Page.build({
-    title: title,
-    content: content,
-  });
-
-  page.save().then(function(savedPage){
-    console.log('this is the savedpage',savedPage.route);
-    res.redirect(savedPage.route); ///???
-  }).catch(function(err){
+  User.findOrCreate({
+    where : {
+      name: req.body.authorName,
+      email: req.body.authorEmail
+    }
+  }).spread(function (user, wasCreatedBool) {
+    return Page.create({
+      title: req.body.title,
+      content: req.body.content,
+      status: req.body.status
+    }).then(function(createdPage) {
+      return createdPage.setAuthor(user);
+    });
+  }).catch(function(err) {
     console.error(err);
-  });
+  })
+
+  // var title = req.body.title;
+  // var content = req.body.content;
+
+  // var page = Page.build({
+  //   title: title,
+  //   content: content,
+  // });
+
+  // page.save().then(function(savedPage){
+  //   console.log('this is the savedpage',savedPage.route);
+  //   res.redirect(savedPage.route);
+  // }).catch(function(err){
+  //   console.error(err);
+  // });
 });
 
 router.get('/add', function(req, res){

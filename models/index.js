@@ -24,7 +24,7 @@ const Page = db.define('page', {
 },{
   hooks: {
     beforeValidate : function(page, options){
-    
+
     function generateUrlTitle (title) {
       if (title) {
         // Removes all non-alphanumeric characters from title
@@ -35,7 +35,7 @@ const Page = db.define('page', {
         return Math.random().toString(36).substring(2, 7);
       }
     }
-    page.urlTitle = generateUrlTitle(page.title);  
+    page.urlTitle = generateUrlTitle(page.title);
     }
   },
   getterMethods: {
@@ -53,7 +53,9 @@ const User = db.define('user', {
     allowNull: false,
     isEmail: true
   }
-})
+});
+
+Page.belongsTo(User, { as: 'author' });
 
 module.exports = {
   Page: Page,
