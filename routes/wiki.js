@@ -59,7 +59,17 @@ router.get('/:urlTitle', function(req, res, next) {
     }
   })
   .then(function(page) {
-    res.render('wikipage', {page : page});
+    if (page === null) {
+      next(new Error('That page was not found!'));
+    }
+
+    return page.getAuthor()
+      .then(function(author) {
+        page.author = author;
+        console.log(page);
+        res.render('wikipage', {page : page});
+      })
+
   })
   .catch(next);
 
